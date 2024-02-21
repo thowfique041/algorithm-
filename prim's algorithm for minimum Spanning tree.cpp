@@ -41,9 +41,9 @@ void findmst(int graph[][100], int v, int start) {
 
     int mst=0;
     cout << "Edge \tWeight\n";
-    for (int i = 1; i < v; i++) {
+    for (int i = 0; i < v; i++) {
         mst = mst+graph[i][parent[i]];
-        cout << parent[i] << " - " << i << "\t" << graph[i][parent[i]] << endl;
+      if(parent[i]!=-1)  cout << parent[i] << " - " << i << "\t" << graph[i][parent[i]] << endl;
     }
     cout<<"\nCost of MST is : "<<mst<<endl;
 }
