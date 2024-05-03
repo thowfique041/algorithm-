@@ -1,7 +1,25 @@
-#include <iostream>
-#include <string>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
+
+string findLCS(const string &s, const string &ss, const vector<vector<int>> &lcsTable) {
+    int l = s.size();
+    int ll = ss.size();
+    string lcs;
+
+    int i = l, j = ll;
+    while (i > 0 && j > 0) {
+        if (s[i - 1] == ss[j - 1]) {
+            lcs = s[i - 1] + lcs;
+            i--;
+            j--;
+        } else if (lcsTable[i - 1][j] > lcsTable[i][j - 1]) {
+            i--;
+        } else {
+            j--;
+        }
+    }
+    return lcs;
+}
 
 int main() {
     string s, ss;
@@ -11,27 +29,31 @@ int main() {
     int l = s.size();
     int ll = ss.size();
 
-    vector<vector<int>> a(l + 1, vector<int>(ll + 1, 0));
+    // Using vector for dynamic memory allocation
+    vector<vector<int>> lcsTable(l + 1, vector<int>(ll + 1, 0));
 
     for (int i = 0; i <= l; i++) {
         for (int j = 0; j <= ll; j++) {
             if (i == 0 || j == 0)
-                a[i][j] = 0;
+                lcsTable[i][j] = 0;
             else if (s[i - 1] == ss[j - 1])
-                a[i][j] = a[i - 1][j - 1] + 1;
+                lcsTable[i][j] = lcsTable[i - 1][j - 1] + 1;
             else {
-                a[i][j] = max(a[i - 1][j], a[i][j - 1]);
+                lcsTable[i][j] = max(lcsTable[i - 1][j], lcsTable[i][j - 1]);
             }
         }
     }
 
-    cout<<"LCS table is : "<<endl;
+    // Print the LCS table
     for (int i = 0; i <= l; i++) {
         for (int j = 0; j <= ll; j++) {
-            cout << a[i][j] << " ";
+            cout << lcsTable[i][j] << " ";
         }
         cout << endl;
     }
+
+    string lcs = findLCS(s, ss, lcsTable);
+    cout << "Longest Common Subsequence: " << lcs << endl;
 
     return 0;
 }
