@@ -30,6 +30,6 @@ int main() {
     }
     
 
-    cout << v[v.size() - 1] << endl;
+   
     return 0;
 }
