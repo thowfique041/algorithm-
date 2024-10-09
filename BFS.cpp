@@ -2,46 +2,53 @@
 using namespace std;
 
 int main() {
-    int V, E;
-    cout << "Enter the number of vertices: ";
-    cin >> V;
-    cout << "Enter the number of edges: ";
-    cin >> E;
+    int v, e;
+    cout << "Number of vertices and edges: ";
+    cin >> v >> e;
 
-    // Initialize adjacency matrix
-    vector<vector<int>> adjMatrix(V, vector<int>(V, 0));
+    // Create a graph represented by an adjacency matrix
+    vector<vector<int>> g(v, vector<int>(v, 0));
 
-    cout << "Enter the edges (u v) format:" << endl;
-    for (int i = 0; i < E; ++i) {
-        int u, v;
-        cin >> u >> v;
-        adjMatrix[u][v] = 1;
-        adjMatrix[v][u] = 1; // For an undirected graph
+    int x, y;
+    cout << "Enter connected vertices (0-indexed):" << endl;
+    for (int i = 0; i < e; i++) {
+        cin >> x >> y;
+        g[x][y] = 1;   // Mark edge from x to y
+        g[y][x] = 1;   // Since the graph is undirected, also mark y to x
     }
 
+    // Vector to track visited nodes
+    vector<bool> p(v, false);  // false means not visited
+
     int start;
-    cout << "Enter the starting vertex for BFS: ";
+    cout << "Enter start vertex (0 to " << v - 1 << "): ";
     cin >> start;
 
-    // Perform BFS
-    vector<bool> visited(V, false);
+    // Validate start vertex
+    if (start < 0 || start >= v) {
+        cout << "Invalid start vertex. Please enter a value between 0 and " << v - 1 << "." << endl;
+        return 1;  // Exit the program if the input is invalid
+    }
+
     queue<int> q;
-    visited[start] = true;
     q.push(start);
+    p[start] = true;  // Mark the starting vertex as visited
 
-    cout << "Breadth First Traversal (starting from vertex " << start << "): ";
+    cout << "BFS path--> ";
     while (!q.empty()) {
-        int current = q.front();
-        cout << current << " ";
+        int node = q.front();
         q.pop();
+        cout << node << " ";
 
-        for (int i = 0; i < V; ++i) {
-            if (adjMatrix[current][i] && !visited[i]) {
-                visited[i] = true;
-                q.push(i);
+        // Explore all adjacent vertices of the current node
+        for (int i = 0; i < v; i++) {
+            if (g[node][i] == 1 && !p[i]) {  // Check if it's connected and not visited
+                p[i] = true;  // Mark as visited
+                q.push(i);    // Add to queue for exploration
             }
         }
     }
 
-    return 0;
+    cout << endl;
+    
 }
